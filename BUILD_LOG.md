@@ -117,3 +117,40 @@
 - Weight tuning required one iteration to correctly rank manufactured_authority over outrage for authority-pattern text
 
 ---
+
+## Phase 4: Intent Model
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:20:00Z
+**Finished**: 2026-04-11T00:28:00Z
+
+### Files created/modified
+- `app/src/models/vocabulary.ts` — word-to-index mapping, OOV hashing, intent-specific word lists
+- `app/src/models/intent.ts` — IntentModel with 2-layer feed-forward network (20→32→12), stated-vs-detected mismatch
+- `app/src/models/data/intent-weights.json` — hand-crafted weights for input→hidden (32x20) and hidden→output (12x32)
+- `app/src/models/intent.test.ts` — 12 tests covering all major intents and mismatch detection
+
+### Tests
+- sell intent (discount/offer language): ✅ Pass
+- inform intent (data/research language): ✅ Pass
+- provoke intent (outrage language): ✅ Pass
+- "I'm just asking questions" mismatch detection: ✅ Pass
+- "I'm not racist but" mismatch detection: ✅ Pass
+- create_urgency intent: ✅ Pass
+- virtue_signal intent: ✅ Pass
+- establish_authority intent: ✅ Pass
+- All 12 intents in distribution: ✅ Pass
+- Distribution sums to 1: ✅ Pass
+- Confidence in [0,1]: ✅ Pass
+- Feature weight positions valid: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+
+### Notes
+- Two-layer feed-forward network with ReLU activation, all in pure TypeScript
+- Stated-vs-detected mismatch works by pattern matching stated intent phrases against classified intent
+- Intent-specific word lists (sell, inform, provoke, virtue_signal, authority) augment the feature vector
+- All 53 tests pass across all 3 test files
+
+---
