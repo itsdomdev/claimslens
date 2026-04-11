@@ -285,3 +285,30 @@
 - Stacking all 5 layers doesn't cause visual chaos — each uses distinct visual language
 
 ---
+
+## Phase 9: Sidebar & Dashboard
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T01:05:00Z
+**Finished**: 2026-04-11T01:15:00Z
+
+### Files created/modified
+- `app/src/viz/ClaimCard.tsx` — claim card with verdict badge, explanation, sources, hedging indicator
+- `app/src/viz/FallacyCard.tsx` — fallacy card with severity badge, explanation, "learn more" expandable
+- `app/src/viz/Sidebar.tsx` — tabbed sidebar (Claims/Fallacies) with claim filtering and verdict summary
+- `app/src/viz/CredibilityDashboard.tsx` — grade, manipulation gauge, claims breakdown, fallacy count, dominant intent
+- `app/src/App.tsx` — refactored to use Sidebar and CredibilityDashboard components
+
+### Tests
+- All 74 tests: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass (253.21 KB JS, 29.28 KB CSS)
+
+### Notes
+- Sidebar has Claims/Fallacies tabs with claim type filtering (all/factual/opinion/prediction)
+- Fallacies sorted by severity (major first)
+- CredibilityDashboard shows color-coded grade, manipulation gauge, mini verdict breakdown
+- Fallacy cards include expandable "What is X?" definitions for all 20 fallacy types
+
+---
