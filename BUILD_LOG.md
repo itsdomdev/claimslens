@@ -224,3 +224,34 @@
 - All 74 tests pass across 5 test files
 
 ---
+
+## Phase 7: Layout & Input UI
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:45:00Z
+**Finished**: 2026-04-11T00:55:00Z
+
+### Files created/modified
+- `app/src/App.tsx` — full app with useReducer state management, orchestrator integration
+- `app/src/ui/Layout.tsx` — CSS Grid layout with header, input, progress, main, sidebar, dashboard
+- `app/src/ui/LayerToggles.tsx` — 5 toggle buttons with layer-specific accent colors
+- `app/src/ui/AnalysisProgress.tsx` — 5-stage progress bar with animations
+- `app/src/ui/ExamplePosts.ts` — 3 example posts (political, LinkedIn, health)
+- `app/src/input/TextInput.tsx` — textarea with char count, validation, analyze button, example buttons
+- `app/src/input/InputRouter.tsx` — tab interface (paste active, URL/screenshot coming soon)
+
+### Tests
+- All 74 existing tests: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass (239.30 KB JS, 21.55 KB CSS)
+
+### Notes
+- App works end-to-end with mock mode: paste text → analyze → see all 5 layers
+- useReducer manages: inputText, analysisState, analysisResult, progressStage, activeLayers
+- Text overlay integrated directly with sentiment ribbon, intent badges, claim underlines, fallacy annotations
+- 3 example posts crafted to exercise all analysis layers
+- Responsive: sidebar below main content on mobile
+- Dark theme throughout with gray-950 base
+
+---
