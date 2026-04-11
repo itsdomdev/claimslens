@@ -370,3 +370,123 @@
 - 3 example posts exercise all analysis layers (verified by orchestrator tests)
 
 ---
+
+## Phase 12: Deploy Configuration
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T01:32:00Z
+**Finished**: 2026-04-11T01:38:00Z
+
+### Files created/modified
+- `.github/workflows/deploy.yml` — GitHub Actions: test → deploy frontend (Pages) + deploy worker
+- `app/public/_headers` — cache immutable assets 1yr, no-cache index.html, security headers (CSP, X-Frame-Options)
+- `worker/wrangler.toml` — updated with production ALLOWED_ORIGIN
+- `README.md` — project overview, how it works, tech stack, run locally, architecture
+
+### Tests
+- All 74 tests: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+
+### Notes
+- Deployment NOT executed — requires manual ANTHROPIC_API_KEY secret setup
+- GitHub Actions workflow: lint+test → parallel deploy frontend + worker
+- _headers sets cache-immutable for hashed assets, no-cache for index.html
+- CSP allows self + API endpoint connections
+- README covers setup with and without API key (mock mode)
+
+---
+
+## Final Summary
+
+**Build finished**: 2026-04-11T01:38:00Z
+**Total phases completed**: 12/12
+**Total phases with issues**: 0
+**Total phases blocked**: 0
+
+### Test results
+- Total test suites: 5
+- Total tests: 74
+- Passing: 74
+- Failing: 0
+
+### Final build
+- `pnpm build` (app): ✅ Pass
+- Bundle size (app): 262.00 KB JS + 30.61 KB CSS (gzip: 83.10 KB + 6.32 KB)
+- html2canvas chunk: 199.56 KB (lazy-loaded, gzip: 46.78 KB)
+
+### Mock mode verification
+- Example 1 (Political tweet): Detects urgency tone, claims with misleading verdict, false dichotomy fallacy, high manipulation score
+- Example 2 (LinkedIn hustle post): Detects sell intent, flattery tone, anecdotal evidence fallacy, hedging detection
+- Example 3 (Health claim): Detects manufactured authority, hedged factual claims, appeal to authority fallacy, contradicted claims
+
+### Known issues
+1. Report image export untested in browser (html2canvas may need scale adjustment for specific renderers)
+2. Worker dry-run not possible without wrangler login — handlers verified via code review only
+3. Mock responses are heuristic-based — real Claude API will produce higher quality analysis
+4. FeatureInspector highlighted text may overlap if multiple feature weights cover same character range
+
+### Ready for manual steps
+1. Set ANTHROPIC_API_KEY in Cloudflare Worker secrets
+2. Connect GitHub repo to Cloudflare Pages
+3. Configure claims.anystackdom.dev DNS
+4. Test with real Claude API calls (disable mock mode)
+5. Add Open Graph screenshot after first real analysis
+6. Iterate Claude prompts against real social media posts
+
+### Post-build file tree
+```
+app/src/analysis/merger.ts
+app/src/analysis/orchestrator.test.ts
+app/src/analysis/orchestrator.ts
+app/src/analysis/preprocessor.test.ts
+app/src/analysis/preprocessor.ts
+app/src/analysis/scorer.ts
+app/src/api/client.ts
+app/src/api/mocks.ts
+app/src/api/parsers.test.ts
+app/src/api/parsers.ts
+app/src/api/prompts.ts
+app/src/api/types.ts
+app/src/App.tsx
+app/src/index.css
+app/src/input/InputRouter.tsx
+app/src/input/TextInput.tsx
+app/src/main.tsx
+app/src/models/data/intent-weights.json
+app/src/models/data/sentiment-lexicon.json
+app/src/models/data/sentiment-weights.json
+app/src/models/features.ts
+app/src/models/intent.test.ts
+app/src/models/intent.ts
+app/src/models/sentiment.test.ts
+app/src/models/sentiment.ts
+app/src/models/tokenizer.ts
+app/src/models/vocabulary.ts
+app/src/report/ImageExporter.ts
+app/src/report/ReportTemplate.tsx
+app/src/test-setup.ts
+app/src/types/analysis.ts
+app/src/ui/AnalysisProgress.tsx
+app/src/ui/ExamplePosts.ts
+app/src/ui/LayerToggles.tsx
+app/src/ui/Layout.tsx
+app/src/ui/ShareMenu.tsx
+app/src/viz/ClaimCard.tsx
+app/src/viz/ClaimHighlight.tsx
+app/src/viz/CredibilityDashboard.tsx
+app/src/viz/FallacyAnnotation.tsx
+app/src/viz/FallacyCard.tsx
+app/src/viz/FeatureInspector.tsx
+app/src/viz/IntentBadge.tsx
+app/src/viz/SentimentRibbon.tsx
+app/src/viz/Sidebar.tsx
+app/src/viz/TextOverlay.tsx
+worker/src/handlers/claims.ts
+worker/src/handlers/factcheck.ts
+worker/src/handlers/reasoning.ts
+worker/src/index.ts
+worker/src/middleware/cors.ts
+worker/src/middleware/rateLimit.ts
+```

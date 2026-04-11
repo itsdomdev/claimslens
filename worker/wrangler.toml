@@ -3,4 +3,6 @@ main = "src/index.ts"
 compatibility_date = "2026-04-11"
 
 [vars]
-ALLOWED_ORIGIN = "http://localhost:5173"
+ALLOWED_ORIGIN = "https://claims.anystackdom.dev,http://localhost:5173"
+
+# ANTHROPIC_API_KEY must be set via: wrangler secret put ANTHROPIC_API_KEY
