@@ -255,3 +255,33 @@
 - Dark theme throughout with gray-950 base
 
 ---
+
+## Phase 8: Text Overlay & Annotation System
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:55:00Z
+**Finished**: 2026-04-11T01:05:00Z
+
+### Files created/modified
+- `app/src/viz/TextOverlay.tsx` — main overlay container with all 5 annotation layers
+- `app/src/viz/SentimentRibbon.tsx` — 4px color ribbon with tone-coded left border
+- `app/src/viz/IntentBadge.tsx` — inline pill badge with confidence opacity, mismatch warning
+- `app/src/viz/ClaimHighlight.tsx` — left-border claim indicators, verdict-coded when available
+- `app/src/viz/FallacyAnnotation.tsx` — severity-coded fallacy labels with explanation
+- `app/src/viz/FeatureInspector.tsx` — modal with per-word weight visualization, tone bar charts, highlighted text
+- `app/src/App.tsx` — refactored to use TextOverlay component
+
+### Tests
+- All 74 tests: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass (247.29 KB JS, 27.54 KB CSS)
+
+### Notes
+- All 5 layers independently toggleable via LayerToggles
+- FeatureInspector is the transparency feature: click any sentence to see per-word weight contributions
+- Sentence text highlighted with colored underlines showing which words triggered classification
+- Tone scores shown as mini bar charts in inspector
+- Stacking all 5 layers doesn't cause visual chaos — each uses distinct visual language
+
+---

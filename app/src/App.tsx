@@ -5,6 +5,8 @@ import Layout from './ui/Layout'
 import InputRouter from './input/InputRouter'
 import AnalysisProgress from './ui/AnalysisProgress'
 import LayerToggles from './ui/LayerToggles'
+import TextOverlay from './viz/TextOverlay'
+import { VERDICT_COLORS } from './viz/ClaimHighlight'
 
 interface AppState {
   inputText: string
@@ -148,80 +150,10 @@ function App() {
             </div>
           )}
           {(isAnalyzing || isComplete) && result?.sentences && (
-            <div className="space-y-2">
-              {result.sentences.map((sentence) => (
-                <div key={sentence.id} className="group relative rounded-md p-2 hover:bg-gray-900/50">
-                  {/* Sentiment ribbon */}
-                  {state.activeLayers.has('sentiment') && (
-                    <div
-                      className="absolute left-0 top-0 bottom-0 w-1 rounded-l-md"
-                      style={{ backgroundColor: getToneColor(sentence.sentiment.dominantTone) }}
-                      title={`Tone: ${sentence.sentiment.dominantTone}`}
-                    />
-                  )}
-                  <div className="pl-3">
-                    <span className="text-sm leading-relaxed text-gray-200">
-                      {sentence.text}
-                    </span>
-                    {/* Intent badge */}
-                    {state.activeLayers.has('intent') && (
-                      <span
-                        className="ml-2 inline-block rounded-full px-2 py-0.5 text-[10px] font-medium"
-                        style={{
-                          backgroundColor: getIntentColor(sentence.intent.primaryIntent),
-                          opacity: Math.max(0.4, sentence.intent.confidence),
-                        }}
-                        title={`Intent: ${sentence.intent.primaryIntent} (${Math.round(sentence.intent.confidence * 100)}%)`}
-                      >
-                        {sentence.intent.primaryIntent}
-                        {sentence.intent.statedVsDetected && ' \u26A0\uFE0F'}
-                      </span>
-                    )}
-                  </div>
-                  {/* Claim underlines */}
-                  {state.activeLayers.has('claims') && sentence.claims.length > 0 && (
-                    <div className="mt-1 pl-3 space-y-1">
-                      {sentence.claims.map((claim) => (
-                        <div
-                          key={claim.id}
-                          className="text-xs border-l-2 pl-2"
-                          style={{ borderColor: getVerdictColor(claim.factCheck?.verdict) }}
-                        >
-                          <span className="text-gray-400">{claim.type}</span>
-                          {state.activeLayers.has('factcheck') && claim.factCheck && (
-                            <span
-                              className="ml-2 rounded px-1.5 py-0.5 text-[10px] font-medium"
-                              style={{ backgroundColor: getVerdictColor(claim.factCheck.verdict), color: '#000' }}
-                            >
-                              {claim.factCheck.verdict}
-                            </span>
-                          )}
-                          {claim.hedging?.detected && (
-                            <span className="ml-2 text-[10px] text-amber-400" title={claim.hedging.effect}>
-                              hedging: "{claim.hedging.hedgePhrase}"
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  {/* Fallacy annotations */}
-                  {state.activeLayers.has('fallacies') && sentence.fallacies.length > 0 && (
-                    <div className="mt-1 pl-3 space-y-1">
-                      {sentence.fallacies.map((fallacy) => (
-                        <div
-                          key={fallacy.id}
-                          className="rounded bg-yellow-950/50 border border-yellow-800/30 px-2 py-1 text-xs text-yellow-300"
-                        >
-                          <span className="font-medium">{fallacy.name}</span>
-                          <span className="ml-2 text-yellow-500">({fallacy.severity})</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <TextOverlay
+              sentences={result.sentences}
+              activeLayers={state.activeLayers}
+            />
           )}
         </div>
       }
@@ -243,7 +175,7 @@ function App() {
                     {claim.factCheck && (
                       <span
                         className="rounded px-2 py-0.5 text-[10px] font-medium"
-                        style={{ backgroundColor: getVerdictColor(claim.factCheck.verdict), color: '#000' }}
+                        style={{ backgroundColor: VERDICT_COLORS[claim.factCheck.verdict], color: '#000' }}
                       >
                         {claim.factCheck.verdict} ({Math.round(claim.factCheck.confidence * 100)}%)
                       </span>
@@ -338,51 +270,6 @@ function App() {
       }
     />
   )
-}
-
-function getToneColor(tone: string): string {
-  const colors: Record<string, string> = {
-    neutral: '#6b7280',
-    fear_appeal: '#ef4444',
-    urgency: '#f59e0b',
-    outrage: '#dc2626',
-    flattery: '#f472b6',
-    false_calm: '#2dd4bf',
-    manufactured_authority: '#a855f7',
-    sarcasm: '#a3e635',
-    empathy: '#60a5fa',
-    celebration: '#4ade80',
-  }
-  return colors[tone] || '#6b7280'
-}
-
-function getIntentColor(intent: string): string {
-  const colors: Record<string, string> = {
-    inform: '#3b82f6',
-    persuade: '#6366f1',
-    sell: '#22c55e',
-    mislead: '#ef4444',
-    deflect: '#f97316',
-    provoke: '#dc2626',
-    establish_authority: '#8b5cf6',
-    build_trust: '#06b6d4',
-    create_urgency: '#f59e0b',
-    virtue_signal: '#ec4899',
-    concern_troll: '#f97316',
-    entertain: '#a3e635',
-  }
-  return colors[intent] || '#6b7280'
-}
-
-function getVerdictColor(verdict?: string): string {
-  const colors: Record<string, string> = {
-    supported: '#4ade80',
-    contradicted: '#ef4444',
-    misleading: '#f59e0b',
-    unverifiable: '#6b7280',
-    outdated: '#eab308',
-  }
-  return colors[verdict || ''] || '#6b7280'
 }
 
 function getGradeColor(grade: string): string {
