@@ -1,0 +1,8 @@
+packages:
+  - app
+  - worker
+
+ignoredBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd

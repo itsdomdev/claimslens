@@ -1,0 +1,11 @@
+{
+  "name": "claimslens",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter app dev",
+    "build": "pnpm --filter app build",
+    "test": "pnpm --filter app test",
+    "worker:dev": "pnpm --filter worker dev",
+    "worker:deploy": "pnpm --filter worker deploy"
+  }
+}
