@@ -1,0 +1,13 @@
+{
+  "_doc": "Weights for linear sentiment model. Each key is a ToneLabel, value is an array of weights for feature vector: [avgSentiment, minSentiment, maxSentiment, sentimentRange, fearScore, urgencyScore, outrageScore, flatteryScore, authorityScore, hedgingScore, exclamationCount, questionCount, capsRatio, ellipsisCount, avgWordLength, wordCount]",
+  "neutral": [0.1, 0.0, 0.0, -0.3, -1.5, -1.5, -1.5, -1.0, -1.0, -0.5, -0.8, -0.3, -0.8, 0.0, 0.0, 0.0],
+  "fear_appeal": [-0.3, -0.5, -0.1, 0.2, 3.5, 0.3, 0.2, 0.0, 0.0, 0.0, 0.2, 0.1, 0.1, 0.0, 0.0, 0.0],
+  "urgency": [-0.1, -0.2, 0.0, 0.1, 0.2, 3.5, 0.1, 0.0, 0.0, 0.0, 0.8, 0.1, 0.5, 0.0, 0.0, 0.0],
+  "outrage": [-0.3, -0.4, -0.1, 0.3, 0.2, 0.2, 3.5, 0.0, -0.5, 0.0, 0.6, 0.2, 0.8, 0.0, 0.0, 0.0],
+  "flattery": [0.5, 0.0, 0.8, 0.2, 0.0, 0.0, 0.0, 4.0, 0.2, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0],
+  "false_calm": [0.1, 0.0, 0.2, -0.2, 0.2, 0.0, 0.0, 0.0, 0.3, 2.0, -0.3, 0.3, -0.3, 0.5, 0.0, 0.0],
+  "manufactured_authority": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 5.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.0],
+  "sarcasm": [0.2, -0.5, 0.5, 0.8, 0.0, 0.0, 0.3, 0.0, 0.0, 0.0, 0.3, 0.5, 0.2, 0.5, 0.0, 0.0],
+  "empathy": [0.5, 0.0, 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, -0.3, 0.0, 0.0, 0.0],
+  "celebration": [1.0, 0.3, 1.0, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.2, 0.0, 0.0, 0.0]
+}

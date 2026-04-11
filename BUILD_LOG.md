@@ -80,3 +80,40 @@
 - Thread numbering (1/ 2/ 3/) is stripped during parsing
 
 ---
+
+## Phase 3: Sentiment & Tone Model
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:12:00Z
+**Finished**: 2026-04-11T00:20:00Z
+
+### Files created/modified
+- `app/src/models/tokenizer.ts` — whitespace/punctuation tokenizer with stop word removal
+- `app/src/models/features.ts` — feature extraction: lexicon scores, fear/urgency/outrage/flattery/authority/hedging detection, punctuation stats
+- `app/src/models/sentiment.ts` — SentimentModel class with linear weights, softmax, feature weight transparency
+- `app/src/models/data/sentiment-lexicon.json` — ~500 word AFINN-style sentiment lexicon
+- `app/src/models/data/sentiment-weights.json` — hand-crafted weights for 10 tone classes
+- `app/src/models/sentiment.test.ts` — 11 tests for tone detection and model properties
+
+### Tests
+- "BREAKING: This is URGENT!!!" → urgency: ✅ Pass
+- "Studies show experts agree this is dangerous" → manufactured_authority: ✅ Pass
+- "Have a nice day" → low arousal: ✅ Pass
+- Fear appeal detection: ✅ Pass
+- Outrage detection: ✅ Pass
+- Flattery detection: ✅ Pass
+- Feature weights mapped to text positions: ✅ Pass
+- Softmax sums to 1: ✅ Pass
+- Valence in [-1,1]: ✅ Pass
+- Arousal in [0,1]: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+
+### Notes
+- All model code is zero-dependency pure TypeScript
+- Pattern-based scores (flattery, authority, hedging) use 0.5 per match capped at 1.0 instead of normalizing by total pattern count — prevents dilution
+- Feature weight transparency maps token contributions back to character positions in original text
+- Weight tuning required one iteration to correctly rank manufactured_authority over outrage for authority-pattern text
+
+---
