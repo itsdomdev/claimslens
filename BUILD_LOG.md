@@ -312,3 +312,32 @@
 - Fallacy cards include expandable "What is X?" definitions for all 20 fallacy types
 
 ---
+
+## Phase 10: Report Image Generator
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T01:15:00Z
+**Finished**: 2026-04-11T01:25:00Z
+
+### Files created/modified
+- `app/src/report/ReportTemplate.tsx` — branded report card at 3 aspect ratios with grade glow, key findings, mini sentiment ribbon
+- `app/src/report/ImageExporter.ts` — html2canvas capture at 2x scale, download and clipboard copy helpers
+- `app/src/ui/ShareMenu.tsx` — export dropdown with format selection, download PNG, copy to clipboard
+- `app/src/App.tsx` — ShareMenu wired into top bar, visible after analysis complete
+
+### Tests
+- All 74 tests: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+- html2canvas lazy-loaded as separate chunk (199.56 KB)
+- Main JS: 262.00 KB, CSS: 30.61 KB
+
+### Notes
+- Report template renders offscreen at target resolution, captured at 2x scale for crisp text
+- Supports Threads (1080x1350), Twitter (1200x675), and Square (1080x1080)
+- Dark gradient background with indigo accents, grade letter has glow effect
+- Footer includes "claims.anystackdom.dev" watermark and CTA
+- html2canvas lazy-loaded — only imported when user clicks export
+
+---

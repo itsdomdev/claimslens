@@ -8,6 +8,7 @@ import LayerToggles from './ui/LayerToggles'
 import TextOverlay from './viz/TextOverlay'
 import Sidebar from './viz/Sidebar'
 import CredibilityDashboard from './viz/CredibilityDashboard'
+import ShareMenu from './ui/ShareMenu'
 
 interface AppState {
   inputText: string
@@ -117,11 +118,14 @@ function App() {
             <h1 className="text-lg font-bold tracking-tight text-white">ClaimsLens</h1>
             <span className="hidden text-xs text-gray-500 sm:inline">Rhetorical Analysis Engine</span>
           </div>
-          <LayerToggles
-            activeLayers={state.activeLayers}
-            onToggle={(layer) => dispatch({ type: 'TOGGLE_LAYER', layer })}
-            disabled={!isComplete}
-          />
+          <div className="flex items-center gap-3">
+            <LayerToggles
+              activeLayers={state.activeLayers}
+              onToggle={(layer) => dispatch({ type: 'TOGGLE_LAYER', layer })}
+              disabled={!isComplete}
+            />
+            {isComplete && result && <ShareMenu result={result} />}
+          </div>
         </div>
       }
       input={
