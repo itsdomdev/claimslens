@@ -341,3 +341,32 @@
 - html2canvas lazy-loaded — only imported when user clicks export
 
 ---
+
+## Phase 11: Polish, Performance & Examples
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T01:25:00Z
+**Finished**: 2026-04-11T01:32:00Z
+
+### Files created/modified
+- `app/index.html` — Open Graph meta tags, Twitter cards, proper title/description, theme-color
+- `app/public/favicon.svg` — indigo lens icon SVG favicon
+
+### Tests
+- All 74 tests: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass (262.00 KB main JS, 30.61 KB CSS)
+
+### Notes
+- OG meta tags set for "ClaimsLens - Rhetorical Analysis Engine"
+- Favicon is a minimalist indigo lens/search icon
+- All edge cases already handled in earlier phases: empty text, short text, max length, API errors
+- Dark theme consistent throughout (bg-gray-950 base)
+- Responsive layout handled by Layout.tsx (sidebar below main on <md)
+- Analyze button has pulse animation, cards have hover lift transitions
+- Feature Inspector has backdrop blur
+- html2canvas lazy-loaded as separate chunk
+- 3 example posts exercise all analysis layers (verified by orchestrator tests)
+
+---
