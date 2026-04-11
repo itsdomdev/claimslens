@@ -154,3 +154,41 @@
 - All 53 tests pass across all 3 test files
 
 ---
+
+## Phase 5: Claude API & Worker Proxy
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:28:00Z
+**Finished**: 2026-04-11T00:38:00Z
+
+### Files created/modified
+- `app/src/api/prompts.ts` — 3 Claude prompt templates with system prompts and few-shot examples
+- `app/src/api/types.ts` — API request/response types
+- `app/src/api/parsers.ts` — JSON response parsers with graceful error handling
+- `app/src/api/client.ts` — ClaimsLensAPI class with mock/real toggle, retries, timeout
+- `app/src/api/mocks.ts` — mock responses for all 3 endpoints with realistic heuristic-based outputs
+- `app/src/api/parsers.test.ts` — 9 parser tests
+- `app/.env` — VITE_USE_MOCKS=true, VITE_API_URL
+- `worker/src/index.ts` — full Worker with routing, rate limiting, CORS, body validation
+- `worker/src/handlers/claims.ts` — Claude API proxy for claim extraction
+- `worker/src/handlers/factcheck.ts` — Claude API proxy for fact checking
+- `worker/src/handlers/reasoning.ts` — Claude API proxy for fallacy detection
+- `worker/src/middleware/cors.ts` — CORS header helper
+- `worker/src/middleware/rateLimit.ts` — in-memory 20 req/min per IP rate limiter
+
+### Tests
+- parseClaims: 4 tests ✅ Pass
+- parseFactCheck: 3 tests ✅ Pass
+- parseFallacies: 2 tests ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+
+### Notes
+- Mock mode enabled by default (VITE_USE_MOCKS=true) — app works without API key
+- Mocks use heuristic-based analysis (regex patterns for claims, fallacies) for realistic outputs
+- Mock delays simulate real API latency (800-2000ms per call)
+- Worker handlers proxy to Claude API with proper auth, model selection, and error handling
+- Prompt templates include few-shot examples and explicit instructions for "misleading but technically true" detection
+
+---
