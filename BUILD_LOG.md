@@ -50,3 +50,33 @@
 - Dev server confirmed working on localhost
 
 ---
+
+## Phase 2: Shared Types & Text Preprocessor
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:05:00Z
+**Finished**: 2026-04-11T00:12:00Z
+
+### Files created/modified
+- `app/src/types/analysis.ts` — all TypeScript interfaces (ToneLabel, IntentLabel, Claim, Fallacy, AnalysisResult, etc.)
+- `app/src/analysis/preprocessor.ts` — sentence splitter, text normalizer, metadata extractor
+- `app/src/analysis/preprocessor.test.ts` — 30 tests covering abbreviations, URLs, mentions, emoji, threads, etc.
+
+### Tests
+- 30 preprocessor tests: ✅ All pass
+- Abbreviation handling (Dr., Mrs., D.C., e.g.): ✅ Pass
+- URL/mention/hashtag handling: ✅ Pass
+- Thread-style numbered lists: ✅ Pass
+- Emoji-heavy text: ✅ Pass
+- Multiple punctuation (!!!, ?!): ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+
+### Notes
+- Sentence splitter uses placeholder-based approach to handle abbreviations, URLs, and decimals
+- Multi-letter abbreviations (D.C., U.S.) followed by capital letter are treated as sentence boundaries
+- Known abbreviations (e.g., i.e.) are always protected from splitting
+- Thread numbering (1/ 2/ 3/) is stripped during parsing
+
+---
