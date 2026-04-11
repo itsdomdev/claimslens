@@ -1,11 +1,22 @@
 import type { Claim, FactCheckResult, Fallacy, FallacyType } from '../types/analysis'
 
 /**
+ * Strip markdown code fences from Claude responses.
+ * Claude often wraps JSON in ```json ... ``` blocks.
+ */
+function stripCodeFences(raw: string): string {
+  const trimmed = raw.trim()
+  const match = trimmed.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/m)
+  if (match) return match[1].trim()
+  return trimmed
+}
+
+/**
  * Parse claims from Claude's JSON response.
  */
 export function parseClaims(raw: string): Claim[] {
   try {
-    const data = JSON.parse(raw)
+    const data = JSON.parse(stripCodeFences(raw))
     const claims = data.claims || data
     if (!Array.isArray(claims)) {
       console.warn('[parseClaims] Expected array, got:', typeof claims)
@@ -37,7 +48,7 @@ export function parseClaims(raw: string): Claim[] {
  */
 export function parseFactCheck(raw: string): FactCheckResult[] {
   try {
-    const data = JSON.parse(raw)
+    const data = JSON.parse(stripCodeFences(raw))
     const results = data.results || data
     if (!Array.isArray(results)) {
       console.warn('[parseFactCheck] Expected array, got:', typeof results)
@@ -72,7 +83,7 @@ export function parseFactCheck(raw: string): FactCheckResult[] {
  */
 export function parseFallacies(raw: string): { fallacies: Fallacy[]; summary: string } {
   try {
-    const data = JSON.parse(raw)
+    const data = JSON.parse(stripCodeFences(raw))
     const fallacies = data.fallacies || []
     const summary = data.summary || ''
 
