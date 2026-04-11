@@ -192,3 +192,35 @@
 - Prompt templates include few-shot examples and explicit instructions for "misleading but technically true" detection
 
 ---
+
+## Phase 6: Analysis Orchestrator
+
+**Status**: ✅ Complete
+**Started**: 2026-04-11T00:38:00Z
+**Finished**: 2026-04-11T00:45:00Z
+
+### Files created/modified
+- `app/src/analysis/orchestrator.ts` — full pipeline: preprocess → local models → claims → fact-check → reasoning → scoring
+- `app/src/analysis/merger.ts` — merges all 5 layers into unified SentenceAnalysis objects
+- `app/src/analysis/scorer.ts` — manipulation score (0-100) and rhetorical grade (A-F) computation
+- `app/src/analysis/orchestrator.test.ts` — 10 tests for pipeline, scorer, and grading
+
+### Tests
+- Full pipeline on political text: ✅ Pass
+- Full pipeline on benign text: ✅ Pass
+- Progress callback stages: ✅ Pass
+- Empty text error: ✅ Pass
+- Clean text scores A: ✅ Pass
+- Contradicted claim scores F: ✅ Pass
+- Grade thresholds B/C/D: ✅ Pass
+
+### Build check
+- `pnpm build`: ✅ Pass
+
+### Notes
+- Progressive loading works: local models → claims → fact-check → reasoning → complete
+- Manipulation score weighted: emotional (30%) + intent mismatch (15%) + false claims (30%) + fallacies (25%)
+- Grade auto-F for any contradicted factual claim
+- All 74 tests pass across 5 test files
+
+---
