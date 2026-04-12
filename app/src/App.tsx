@@ -12,6 +12,7 @@ import ShareMenu from './ui/ShareMenu'
 
 interface AppState {
   inputText: string
+  inputSource: 'paste' | 'url' | 'screenshot'
   analysisState: 'idle' | 'analyzing' | 'complete' | 'error'
   analysisResult: AnalysisResult | null
   progressStage: AnalysisStage
@@ -27,11 +28,13 @@ type AppAction =
   | { type: 'ERROR'; error: string }
   | { type: 'TOGGLE_LAYER'; layer: LayerName }
   | { type: 'RESET' }
+  | { type: 'SET_SOURCE'; source: 'paste' | 'url' | 'screenshot' }
 
 const ALL_LAYERS: LayerName[] = ['sentiment', 'intent', 'claims', 'factcheck', 'fallacies']
 
 const initialState: AppState = {
   inputText: '',
+  inputSource: 'paste',
   analysisState: 'idle',
   analysisResult: null,
   progressStage: 'idle',
@@ -43,6 +46,8 @@ function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'SET_INPUT':
       return { ...state, inputText: action.text }
+    case 'SET_SOURCE':
+      return { ...state, inputSource: action.source }
     case 'START_ANALYSIS':
       return {
         ...state,
@@ -97,14 +102,14 @@ function App() {
 
     try {
       const result = await orchestrator.analyze(
-        { text: state.inputText, source: 'paste' },
+        { text: state.inputText, source: state.inputSource },
         (update) => dispatch({ type: 'PROGRESS', update }),
       )
       dispatch({ type: 'COMPLETE', result })
     } catch (e) {
       dispatch({ type: 'ERROR', error: e instanceof Error ? e.message : 'Analysis failed' })
     }
-  }, [state.inputText])
+  }, [state.inputText, state.inputSource])
 
   const isAnalyzing = state.analysisState === 'analyzing'
   const isComplete = state.analysisState === 'complete'
@@ -133,6 +138,7 @@ function App() {
           value={state.inputText}
           onChange={(text) => dispatch({ type: 'SET_INPUT', text })}
           onAnalyze={handleAnalyze}
+          onSourceChange={(source) => dispatch({ type: 'SET_SOURCE', source })}
           analyzing={isAnalyzing}
           readonly={isComplete}
         />
