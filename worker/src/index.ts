@@ -3,6 +3,7 @@ import { checkRateLimit } from './middleware/rateLimit'
 import { handleClaims } from './handlers/claims'
 import { handleFactCheck } from './handlers/factcheck'
 import { handleReasoning } from './handlers/reasoning'
+import { handleUnfurl } from './handlers/unfurl'
 
 export interface Env {
   ANTHROPIC_API_KEY: string
@@ -75,10 +76,7 @@ export default {
           response = await handleReasoning(body, env)
           break
         case '/api/unfurl':
-          response = new Response(
-            JSON.stringify({ error: 'URL unfurling not implemented' }),
-            { status: 501 },
-          )
+          response = await handleUnfurl(body, env)
           break
         default:
           response = new Response('Not found', { status: 404 })
