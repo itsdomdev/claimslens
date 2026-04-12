@@ -1,5 +1,5 @@
 import type { Claim, FactCheckResult, Fallacy } from '../types/analysis'
-import { parseClaims, parseFactCheck, parseFallacies } from './parsers'
+import { parseClaims, parseFactCheck, parseFallacies, parseExtraction } from './parsers'
 import { mockExtractClaims, mockFactCheck, mockAnalyzeReasoning } from './mocks'
 
 const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
@@ -56,6 +56,17 @@ export class ClaimsLensAPI {
     return parseFallacies(response)
   }
 
+  async unfurlUrl(url: string): Promise<{ text: string; platform: string; author?: string; date?: string }> {
+    const response = await this.post('/unfurl', { url })
+    return parseExtraction(response)
+  }
+
+  async extractFromScreenshot(file: File): Promise<{ text: string; platform: string; author?: string; date?: string }> {
+    const { base64, mimeType } = await fileToBase64(file)
+    const response = await this.post('/ocr', { image: base64, mimeType })
+    return parseExtraction(response)
+  }
+
   private async post(path: string, body: unknown): Promise<string> {
     let lastError: Error | null = null
 
@@ -92,4 +103,18 @@ export class ClaimsLensAPI {
 
     throw lastError || new Error('Unknown API error')
   }
+}
+
+function fileToBase64(file: File): Promise<{ base64: string; mimeType: string }> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const dataUrl = reader.result as string
+      // Strip the "data:image/png;base64," prefix
+      const base64 = dataUrl.split(',')[1]
+      resolve({ base64, mimeType: file.type })
+    }
+    reader.onerror = () => reject(new Error('Failed to read file'))
+    reader.readAsDataURL(file)
+  })
 }

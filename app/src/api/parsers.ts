@@ -114,3 +114,29 @@ export function parseFallacies(raw: string): { fallacies: Fallacy[]; summary: st
     return { fallacies: [], summary: '' }
   }
 }
+
+/**
+ * Parse URL unfurl or OCR extraction response.
+ */
+export function parseExtraction(raw: string): { text: string; platform: string; author?: string; date?: string } {
+  try {
+    const data = JSON.parse(stripCodeFences(raw))
+    if (data.error) {
+      throw new Error(data.error)
+    }
+    if (!data.text || typeof data.text !== 'string') {
+      throw new Error('No text extracted from response')
+    }
+    return {
+      text: data.text,
+      platform: data.platform || 'other',
+      author: data.author || undefined,
+      date: data.date || undefined,
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message !== 'No text extracted from response' && !e.message.startsWith('Could not')) {
+      console.warn('[parseExtraction] Failed to parse JSON:', e)
+    }
+    throw e
+  }
+}

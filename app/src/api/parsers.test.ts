@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseClaims, parseFactCheck, parseFallacies } from './parsers'
+import { parseClaims, parseFactCheck, parseFallacies, parseExtraction } from './parsers'
 
 describe('parseClaims', () => {
   it('parses valid claim JSON', () => {
@@ -77,5 +77,35 @@ describe('parseFallacies', () => {
     const result = parseFallacies('nope')
     expect(result.fallacies).toEqual([])
     expect(result.summary).toBe('')
+  })
+})
+
+describe('parseExtraction', () => {
+  it('parses valid extraction response', () => {
+    const raw = JSON.stringify({ text: 'Hello world', platform: 'twitter', author: 'user1', date: '2026-01-01' })
+    const result = parseExtraction(raw)
+    expect(result.text).toBe('Hello world')
+    expect(result.platform).toBe('twitter')
+    expect(result.author).toBe('user1')
+  })
+
+  it('handles code-fence wrapped response', () => {
+    const raw = '```json\n{"text": "Post text", "platform": "threads"}\n```'
+    const result = parseExtraction(raw)
+    expect(result.text).toBe('Post text')
+  })
+
+  it('throws on error response', () => {
+    const raw = JSON.stringify({ error: 'Could not access URL' })
+    expect(() => parseExtraction(raw)).toThrow('Could not access URL')
+  })
+
+  it('throws on missing text', () => {
+    const raw = JSON.stringify({ platform: 'twitter' })
+    expect(() => parseExtraction(raw)).toThrow('No text extracted')
+  })
+
+  it('throws on malformed JSON', () => {
+    expect(() => parseExtraction('not json')).toThrow()
   })
 })
