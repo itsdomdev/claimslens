@@ -4,6 +4,7 @@ import { handleClaims } from './handlers/claims'
 import { handleFactCheck } from './handlers/factcheck'
 import { handleReasoning } from './handlers/reasoning'
 import { handleUnfurl } from './handlers/unfurl'
+import { handleOcr } from './handlers/ocr'
 
 export interface Env {
   ANTHROPIC_API_KEY: string
@@ -11,6 +12,7 @@ export interface Env {
 }
 
 const MAX_BODY_SIZE = 10_000
+const MAX_OCR_BODY_SIZE = 8_000_000 // 8MB for base64 images
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -48,7 +50,8 @@ export default {
     let body: Record<string, unknown>
     try {
       const text = await request.text()
-      if (text.length > MAX_BODY_SIZE) {
+      const maxSize = url.pathname === '/api/ocr' ? MAX_OCR_BODY_SIZE : MAX_BODY_SIZE
+      if (text.length > maxSize) {
         return new Response(
           JSON.stringify({ error: 'Request body too large' }),
           { status: 413, headers: { ...headers, 'Content-Type': 'application/json' } },
@@ -77,6 +80,9 @@ export default {
           break
         case '/api/unfurl':
           response = await handleUnfurl(body, env)
+          break
+        case '/api/ocr':
+          response = await handleOcr(body, env)
           break
         default:
           response = new Response('Not found', { status: 404 })
