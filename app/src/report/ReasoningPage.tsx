@@ -85,7 +85,7 @@ const ReasoningPage = forwardRef<HTMLDivElement, ReasoningPageProps>(
                     </span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#9ca3af', lineHeight: '1.4' }}>
-                    {f.explanation.length > 120 ? f.explanation.slice(0, 117) + '...' : f.explanation}
+                    {f.explanation}
                   </div>
                 </div>
               ))}
@@ -133,7 +133,7 @@ const ReasoningPage = forwardRef<HTMLDivElement, ReasoningPageProps>(
                 {'\u26A0'} Intent Mismatch Detected
               </div>
               <div style={{ fontSize: '11px', color: '#d1d5db', lineHeight: '1.4' }}>
-                {mismatch.mismatchExplanation.length > 150 ? mismatch.mismatchExplanation.slice(0, 147) + '...' : mismatch.mismatchExplanation}
+                {mismatch.mismatchExplanation}
               </div>
             </div>
           )}

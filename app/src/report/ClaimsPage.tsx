@@ -40,7 +40,7 @@ const ClaimsPage = forwardRef<HTMLDivElement, ClaimsPageProps>(
                 borderLeft: `3px solid ${verdictColor}`,
               }}>
                 <div style={{ fontSize: '13px', color: '#d1d5db', lineHeight: '1.5', marginBottom: '8px' }}>
-                  "{claim.text.length > 120 ? claim.text.slice(0, 117) + '...' : claim.text}"
+                  "{claim.text}"
                 </div>
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '10px', fontWeight: 600, color: '#9ca3af', backgroundColor: '#1f2028', borderRadius: '4px', padding: '2px 8px' }}>
@@ -59,7 +59,7 @@ const ClaimsPage = forwardRef<HTMLDivElement, ClaimsPageProps>(
                 </div>
                 {claim.factCheck?.explanation && (
                   <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '6px', lineHeight: '1.4' }}>
-                    {claim.factCheck.explanation.length > 100 ? claim.factCheck.explanation.slice(0, 97) + '...' : claim.factCheck.explanation}
+                    {claim.factCheck.explanation}
                   </div>
                 )}
               </div>
