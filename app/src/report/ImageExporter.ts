@@ -2,10 +2,9 @@ import type { ReportFormat } from './ReportTemplate'
 import { DIMENSIONS } from './ReportTemplate'
 
 /**
- * Export a report template element as a PNG blob.
- * Uses html2canvas (lazy-loaded to reduce initial bundle).
+ * Export a single report page element as a PNG blob.
  */
-export async function exportReport(
+export async function exportSinglePage(
   element: HTMLElement,
   format: ReportFormat,
 ): Promise<Blob> {
@@ -16,7 +15,7 @@ export async function exportReport(
   const canvas = await html2canvas(element, {
     width,
     height,
-    scale: 2, // 2x for crisp text on retina
+    scale: 2,
     backgroundColor: '#0a0a0f',
     logging: false,
     useCORS: true,
@@ -35,6 +34,20 @@ export async function exportReport(
 }
 
 /**
+ * Export multiple report page elements as PNG blobs.
+ */
+export async function exportMultiplePages(
+  elements: HTMLElement[],
+  format: ReportFormat,
+): Promise<Blob[]> {
+  const blobs: Blob[] = []
+  for (const element of elements) {
+    blobs.push(await exportSinglePage(element, format))
+  }
+  return blobs
+}
+
+/**
  * Download a blob as a file.
  */
 export function downloadBlob(blob: Blob, filename: string): void {
@@ -46,6 +59,15 @@ export function downloadBlob(blob: Blob, filename: string): void {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
+}
+
+/**
+ * Download multiple blobs as separate files.
+ */
+export function downloadMultipleBlobs(blobs: Blob[], filenames: string[]): void {
+  for (let i = 0; i < blobs.length; i++) {
+    downloadBlob(blobs[i], filenames[i])
+  }
 }
 
 /**
