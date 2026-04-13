@@ -53,17 +53,5 @@ export function ReportHeader({ title, pageIndicator, timestamp, format }: Report
 }
 
 export function ReportFooter() {
-  return (
-    <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      borderTop: '1px solid #1f2028', paddingTop: '12px',
-    }}>
-      <div style={{ fontSize: '13px', color: '#6366f1', fontWeight: 600 }}>
-        claims.anystackdom.dev
-      </div>
-      <div style={{ fontSize: '11px', color: '#4b5563' }}>
-        Analyze any post at claims.anystackdom.dev
-      </div>
-    </div>
-  )
+  return null
 }
